@@ -1,0 +1,26 @@
+#include <reg51.h>
+
+void delay(int value) 
+	{
+    int i, j;
+    for (i = 0; i <= value; i++) 
+			{
+        for (j = 0; j <= 5; j++) 
+					{
+							//nothing
+        }
+    }
+}
+	char arr[5] = {'M','I','C','R','O'};
+void main() 
+{
+	int i;
+	while(1)
+	{
+		for (i = 0; i <= 4; i++) 
+			{
+				P2 = arr[i];
+				delay(5000);
+			}
+	} 
+}
