@@ -1,0 +1,50 @@
+#include <p18f4520.h>
+#include <delays.h>
+#pragma config OSC = HS // High-speed oscillator
+#pragma config WDT = OFF //Watchdog Timer disabled
+#pragma config LVP = OFF // Low-voltage Programming disabled
+#pragma config PBADEN = OFF
+
+#define BUZZER PORTAbits.RA3 //Buzzer connected to PORTA 3rd PIN
+#define SWITCH0 PORTBbits.RB0 //Switch0 connected to PORTB 0th PIN
+#define SWITCH1 PORTBbits.RB1 //Switch1 connected to PORTB 1st PIN
+void main(void)
+{
+TRISA = 0x00; // RA3,OutPut Direction
+TRISB = 0xff; // RB0,B1 Input Direction
+TRISD = 0x00; // [RD0-3=LED's][RD4,5=Relay1,2]OutPut Direction
+PORTD = 0xff; // [RD0-3=LED's][RD4,5=Relay1,2] Initialise as 0xff
+BUZZER = 0x00;
+while(1)
+{
+if(SWITCH0==0) // Condition for 1st switch {
+while(1)
+{
+BUZZER =1; // Buzzer On
+PORTD = 0x37; //(Relay1&2 = 1)&(LED's sequence L-to-R =0111=7) Delay10KTCYx(100); //
+400mSDelay
+PORTD = 0x3B; // (LED's sequence Left to Right=1011=B) Delay10KTCYx(100);
+PORTD = 0x3D;
+Delay10KTCYx(100);
+PORTD = 0x3E;
+Delay10KTCYx(100);
+if(SWITCH1==0) // check if 2nd switch is pressed
+break;
+}
+}
+else if(SWITCH1==0) // Condition for 2nd switch {
+while(1)
+{
+BUZZER =0; // Buzzer Off
+PORTD = 0xcE; //(Relay1&2 = 0)&(LED's seq R-to Left=1110=E) Delay10KTCYx(100);
+PORTD = 0xcD; // LED's sequence Right to Left=1101=D Delay10KTCYx(100);
+PORTD = 0xcB;
+Delay10KTCYx(100);
+PORTD = 0xc7;
+Delay10KTCYx(100);
+if(SWITCH0==0) // check if 1st switch is pressed
+break;
+}
+}
+}
+}
